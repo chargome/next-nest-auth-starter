@@ -1,4 +1,3 @@
-import { NotFoundException } from '@nestjs/common';
 import { Test, TestingModule } from '@nestjs/testing';
 import { User } from '@prisma/client';
 import { PrismaService } from '../prisma/prisma.service';
@@ -46,10 +45,9 @@ describe('UsersService', () => {
     expect(res.email).toBeDefined();
   });
 
-  it('should throw when no user is found', async () => {
-    await expect(service.getUserById(11)).rejects.toBeInstanceOf(
-      NotFoundException,
-    );
+  it('should return null when no user is found', async () => {
+    const res = await service.getUserById(11);
+    expect(res).toBeNull();
   });
 
   it('should create user', async () => {
