@@ -47,7 +47,7 @@ describe('UsersService', () => {
 
   it('should return null when no user is found', async () => {
     const res = await service.getUserById(11);
-    expect(res).toBeNull();
+    expect(res).not.toBeDefined();
   });
 
   it('should create user', async () => {

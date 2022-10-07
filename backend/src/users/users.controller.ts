@@ -28,8 +28,15 @@ export class UsersController {
     }
   }
 
+  @Get()
+  async users() {
+    const users = await this.usersService.getUsers();
+    return users;
+  }
+
   @Post()
   async createUser(@Body() data: CreateUserDto) {
-    return await this.usersService.create(data);
+    const newUser = await this.usersService.create(data);
+    return newUser;
   }
 }
