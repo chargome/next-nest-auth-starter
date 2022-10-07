@@ -1,0 +1,11 @@
+### GET /users/:id
+GET http://localhost:3000/users/1
+
+### POST /users
+POST http://localhost:3000/users
+content-type: application/json
+
+{
+  "email": "albert@hoho.bo",
+  "name": "Alberto"
+}
