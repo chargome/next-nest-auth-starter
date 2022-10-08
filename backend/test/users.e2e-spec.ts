@@ -62,4 +62,22 @@ describe('UsersController (e2e)', () => {
         expect(res.body[1].name).toEqual(user2.name);
       });
   });
+
+  it('/users/[id] (GET)', async () => {
+    const user1: Prisma.UserCreateInput = {
+      email: 'alb@ert.com',
+      name: 'Albert',
+    };
+    const createRes = await prisma.user.create({ data: user1 });
+
+    return request(app.getHttpServer())
+      .get(`/users/${createRes.id}`)
+      .expect(200)
+      .then((res) => {
+        console.log(res.body);
+        expect(res.body.id).toEqual(createRes.id);
+        expect(res.body.email).toEqual(createRes.email);
+        expect(res.body.name).toEqual(createRes.name);
+      });
+  });
 });

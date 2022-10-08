@@ -16,6 +16,7 @@ export class UsersController {
 
   @Get('/:id')
   async user(@Param('id') id: string) {
+    console.log('id: ', id);
     const userId = +id;
     if (!userId) {
       throw new BadRequestException();
@@ -26,10 +27,13 @@ export class UsersController {
     if (!user) {
       throw new NotFoundException('user not found');
     }
+
+    return user;
   }
 
   @Get()
   async users() {
+    console.log('called');
     const users = await this.usersService.getUsers();
     return users;
   }
