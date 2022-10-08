@@ -16,7 +16,6 @@ export class UsersController {
 
   @Get('/:id')
   async user(@Param('id') id: string) {
-    console.log('id: ', id);
     const userId = +id;
     if (!userId) {
       throw new BadRequestException();
@@ -33,14 +32,13 @@ export class UsersController {
 
   @Get()
   async users() {
-    console.log('called');
     const users = await this.usersService.getUsers();
     return users;
   }
 
   @Post()
   async createUser(@Body() data: CreateUserDto) {
-    const newUser = await this.usersService.create(data);
+    const newUser = await this.usersService.createUser(data);
     return newUser;
   }
 }

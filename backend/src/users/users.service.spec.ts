@@ -52,7 +52,7 @@ describe('UsersService', () => {
 
   it('should create user', async () => {
     const data = { email: 'my@mail.com', name: 'Charles' };
-    const res = await service.create(data);
+    const res = await service.createUser(data);
     expect(res).toBeDefined();
     expect(res.id).toBeDefined();
     expect(res.email).toEqual(data.email);
