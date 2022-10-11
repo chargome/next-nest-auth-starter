@@ -4,8 +4,8 @@ import { PrismaService } from '../prisma/prisma.service';
 import { UsersService } from './users.service';
 
 const mockUsers: User[] = [
-  { id: 1, name: 'Albert', email: 'al@bert.com' },
-  { id: 2, name: 'Alberto', email: 'al@berto.com' },
+  { id: 1, name: 'Albert', email: 'al@bert.com', password: 'pass' },
+  { id: 2, name: 'Alberto', email: 'al@berto.com', password: '1234' },
 ];
 
 describe('UsersService', () => {
@@ -51,7 +51,7 @@ describe('UsersService', () => {
   });
 
   it('should create user', async () => {
-    const data = { email: 'my@mail.com', name: 'Charles' };
+    const data = { email: 'my@mail.com', name: 'Charles', password: 'geheim' };
     const res = await service.createUser(data);
     expect(res).toBeDefined();
     expect(res.id).toBeDefined();

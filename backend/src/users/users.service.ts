@@ -16,6 +16,12 @@ export class UsersService {
     });
   }
 
+  async getUserByEmail(email: string) {
+    return this.prisma.user.findUnique({
+      where: { email },
+    });
+  }
+
   async getUsers() {
     return this.prisma.user.findMany();
   }

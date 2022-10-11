@@ -1,16 +1,16 @@
 import {
   BadRequestException,
-  Body,
   Controller,
   Get,
   NotFoundException,
   Param,
-  Post,
+  UseGuards,
 } from '@nestjs/common';
-import { CreateUserDto } from './dto/create-user-dto';
+import { AuthenticatedGuard } from '../auth/guards/authenticated.guard';
 import { UsersService } from './users.service';
 
 @Controller('users')
+@UseGuards(AuthenticatedGuard)
 export class UsersController {
   constructor(private readonly usersService: UsersService) {}
 
@@ -34,11 +34,5 @@ export class UsersController {
   async users() {
     const users = await this.usersService.getUsers();
     return users;
-  }
-
-  @Post()
-  async createUser(@Body() data: CreateUserDto) {
-    const newUser = await this.usersService.createUser(data);
-    return newUser;
   }
 }

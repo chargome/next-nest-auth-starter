@@ -1,11 +1,12 @@
 import { Test, TestingModule } from '@nestjs/testing';
 import { User } from '@prisma/client';
+import { AuthService } from '../auth/auth.service';
 import { UsersController } from './users.controller';
 import { UsersService } from './users.service';
 
 const mockUsers: User[] = [
-  { id: 1, name: 'Albert', email: 'al@bert.com' },
-  { id: 2, name: 'Alberto', email: 'al@berto.com' },
+  { id: 1, name: 'Albert', email: 'al@bert.com', password: 'geheim' },
+  { id: 2, name: 'Alberto', email: 'al@berto.com', password: 'strenggeheim' },
 ];
 
 describe('UsersController', () => {
@@ -27,6 +28,7 @@ describe('UsersController', () => {
           provide: UsersService,
           useValue: mockUserService,
         },
+        AuthService,
       ],
     }).compile();
 
@@ -57,15 +59,5 @@ describe('UsersController', () => {
     const res = await controller.users();
     expect(res).toBeDefined();
     expect(res).toHaveLength(2);
-  });
-
-  it('should create user', async () => {
-    const email = 'bobo@banani.com';
-    const name = 'bobo';
-    const res = await controller.createUser({ email, name });
-    expect(res).toBeDefined();
-    expect(res.email).toEqual(email);
-    expect(res.name).toEqual(name);
-    expect(res.id).toBeDefined();
   });
 });

@@ -3,6 +3,7 @@ import { INestApplication } from '@nestjs/common';
 import * as request from 'supertest';
 import { AppModule } from './../src/app.module';
 import { PrismaClient, Prisma } from '@prisma/client';
+import { getLoginCookie, setupApp, teardown } from './util';
 
 describe('UsersController (e2e)', () => {
   let app: INestApplication;
@@ -14,46 +15,36 @@ describe('UsersController (e2e)', () => {
     }).compile();
 
     app = moduleFixture.createNestApplication();
+    setupApp(app);
     await app.init();
   });
 
   afterEach(async () => {
-    await prisma.user.deleteMany();
-    //await prisma.$disconnect();
-  });
-
-  it('/users (POST)', () => {
-    const email = 'alb@ert.com';
-    const name = 'Albert';
-    return request(app.getHttpServer())
-      .post('/users')
-      .send({ email, name })
-      .expect(201)
-      .then((res) => {
-        const { email, id, name } = res.body;
-        expect(id).toBeDefined();
-        expect(email).toEqual(email);
-        expect(name).toEqual(name);
-      });
+    await teardown(prisma);
   });
 
   it('/users (GET)', async () => {
     const user1: Prisma.UserCreateInput = {
       email: 'alb@ert.com',
       name: 'Albert',
+      password: 'somepw',
     };
     const user2: Prisma.UserCreateInput = {
       email: 'char@gome.com',
       name: 'Charly',
+      password: 'somepw',
     };
     await prisma.user.create({ data: user1 });
     await prisma.user.create({ data: user2 });
 
+    const cookie = await getLoginCookie(app, 'my@mail.com', 'geheim');
+
     return request(app.getHttpServer())
       .get(`/users`)
+      .set('Cookie', cookie)
       .expect(200)
       .then((res) => {
-        expect(res.body).toHaveLength(2);
+        expect(res.body).toHaveLength(3);
         expect(res.body[0].id).toBeDefined();
         expect(res.body[0].email).toEqual(user1.email);
         expect(res.body[0].name).toEqual(user1.name);
@@ -67,14 +58,17 @@ describe('UsersController (e2e)', () => {
     const user1: Prisma.UserCreateInput = {
       email: 'alb@ert.com',
       name: 'Albert',
+      password: 'ABC123',
     };
     const createRes = await prisma.user.create({ data: user1 });
 
+    const cookie = await getLoginCookie(app, 'my@mail.com', 'geheim');
+
     return request(app.getHttpServer())
       .get(`/users/${createRes.id}`)
+      .set('Cookie', cookie)
       .expect(200)
       .then((res) => {
-        console.log(res.body);
         expect(res.body.id).toEqual(createRes.id);
         expect(res.body.email).toEqual(createRes.email);
         expect(res.body.name).toEqual(createRes.name);
