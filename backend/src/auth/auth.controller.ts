@@ -5,8 +5,8 @@ import {
   Body,
   Get,
   Req,
-  InternalServerErrorException,
   HttpCode,
+  BadRequestException,
 } from '@nestjs/common';
 import { Request } from 'express';
 import { Serialize } from '../interceptors/serialize.interceptor';
@@ -50,10 +50,11 @@ export class AuthController {
   @UseGuards(AuthenticatedGuard)
   @HttpCode(205)
   async logout(@Req() req: Request) {
-    req.logout((err) => {
+    req.logout((err: any) => {
       if (err) {
-        throw new InternalServerErrorException();
+        throw new BadRequestException();
       }
+      return { success: true };
     });
   }
 }
