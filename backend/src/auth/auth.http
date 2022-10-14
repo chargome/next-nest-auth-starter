@@ -1,5 +1,5 @@
 ### POST /auth/register
-POST http://localhost:3000/auth/register
+POST http://localhost:4000/auth/register
 Content-Type: application/json
 
 {
@@ -9,7 +9,7 @@ Content-Type: application/json
 }
 
 ### POST /auth/login
-POST http://localhost:3000/auth/login
+POST http://localhost:4000/auth/login
 Content-Type: application/json
 
 {
@@ -18,7 +18,7 @@ Content-Type: application/json
 }
 
 ### GET /auth/me
-GET http://localhost:3000/auth/me
+GET http://localhost:4000/auth/me
 
-### GET /auth/logout
-POST http://localhost:3000/auth/logout
+### POST /auth/logout
+POST http://localhost:4000/auth/logout
